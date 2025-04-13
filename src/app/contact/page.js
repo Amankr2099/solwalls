@@ -10,12 +10,26 @@ const ContactUs = () => {
     setForm((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    // You could send this to an API here
-    alert('Form submitted');
-    setSubmitted(true);
-    setForm({ name: '', email: '', message: '' });
+
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    const formData = new FormData(event.target);
+
+    formData.append("access_key",'3643ce41-a0a5-4baf-bec4-4a46bc6505b5');
+
+    const response = await fetch("https://api.web3forms.com/submit", {
+      method: "POST",
+      body: formData
+    });
+
+    const data = await response.json();
+
+    if (data.success) {
+      alert("Form Submitted Successfully");
+      event.target.reset();
+    } else {
+      alert("Unable to send email at current moment");
+    }
   };
 
   return (
@@ -28,7 +42,7 @@ const ContactUs = () => {
           <div className="mb-4 text-green-600 font-medium">Thanks for reaching out! We'll be in touch soon.</div>
         )}
 
-        <form onSubmit={handleSubmit} className="space-y-4">
+        <form onSubmit={handleSubmit} className="space-y-4 text-gray-700">
           <div>
             <label className="block text-sm font-medium text-gray-700">Name</label>
             <input

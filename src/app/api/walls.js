@@ -24,6 +24,18 @@ async function getWallById(wallId) {
         throw error;
     }
 }
+// async function getAllWalls() {
+//     try {
+//         const response = await databases.listDocuments(
+//             conf.appwriteDatabaseId,
+//             conf.appwriteWallsId
+//         );
+//         return response.documents; // This returns the array of documents
+//     } catch (error) {
+//         console.error('Error fetching all walls:', error);
+//         throw error;
+//     }
+// }
 
 async function getMultipleWallsByIds(wallIds) {
     try {
@@ -79,6 +91,8 @@ async function getWallsByTags(tags) {
 function getImageURL(fileId) {
     try {
         const imageURL = storage.getFilePreview(conf.appwriteBucketId, fileId);
+        console.log(imageURL);
+        
         return imageURL;
     } catch (error) {
         console.error('Error generating image URL:', error);
@@ -104,12 +118,27 @@ async function getTopRecentWalls() {
     }
   };
 
+// async function updateWallImageURL(wallId, newImageURL) {
+//     try {
+//         const updated = await databases.updateDocument(
+//             conf.appwriteDatabaseId,
+//             conf.appwriteWallsId,
+//             wallId,
+//             { imageURL: newImageURL }
+//         );
+//         return updated;
+//     } catch (error) {
+//         console.error('Error updating wall image URL:', error);
+//         throw error;
+//     }
+// }
+
   export { 
     getWallById, 
     getMultipleWallsByIds,
     getWallsByTheme, 
     getWallsByTags, 
     getImageURL, 
-    getTopRecentWalls 
+    getTopRecentWalls ,
 };
 
