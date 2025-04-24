@@ -40,24 +40,29 @@ async function getThemeByName(themeName) {
   }
 }
 
-export {getThemeByName,getThemes}
 
-// export default async function handler(req, res) {
-//   if (req.method === 'GET') {
-//     // For creating a theme
-//     const { themeName } = req.body;
-//     try {
-//         if (themeName) {
-//             const themes = await getThemeByName();
-//             res.status(200).json(themes);
-//         }else{
-//             const themes = await getThemes();
-//             res.status(200).json(themes);
-//         }
-//     } catch (error) {
-//       res.status(500).json({ error: 'Error fetching themes' });
-//     }
-//   } else {
-//     res.status(405).json({ message: 'Method Not Allowed' });
-//   }
-// }
+async function getTags(query) {
+  try {
+    const result = await databases.listDocuments(
+      conf.appwriteDatabaseId,
+      conf.appwriteThemeId,
+      [] // Fetch all themes, or filter further if needed
+    );
+
+    const tags = result.documents
+      .flatMap((doc) => doc.tags)
+      .filter((tag, i, arr) => arr.indexOf(tag) === i) // unique
+      .filter((tag) => tag.toLowerCase().startsWith(query.toLowerCase()));
+
+    return tags;
+  } catch (err) {
+    console.error('Error fetching theme:', err);
+    throw err;
+  }
+  
+}
+
+
+
+export {getThemeByName,getThemes,getTags}
+
